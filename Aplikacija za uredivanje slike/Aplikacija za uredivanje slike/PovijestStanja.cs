@@ -25,5 +25,10 @@ namespace Aplikacija_za_uredivanje_slike
             this.RemoveFirst();
             return temp;
         }
+        public Bitmap GetFirst()
+        {
+            var item = this.First.Value;
+            return item;
+        }
     }
 }

@@ -27,19 +27,26 @@ namespace Aplikacija_za_uredivanje_slike
         {
             imageBox1.Image = ModulInputOutput.UcitajSliku();
             PokaziKomponente();
+            //if (imageBox1.Image == null)
+            //{
+            //    SakrijKomponenete();
+            //}
             //ako stisne cancel pri odabiru datoteke, Image ce biti null
             try
             {
-                DodajSlikuUListu(imageBox1.Image.Bitmap);
+                if (imageBox1.Image != null)
+                    DodajSlikuUListu(imageBox1.Image.Bitmap);
+                else
+                {
+                    imageBox1.Image = new Image<Bgr, byte>(modulProcessImage.PovijestStanja.GetFirst());
+                    PokaziKomponente();
+                }
             }
             catch (NullReferenceException exception)
             {
 
             }
-            if(imageBox1.Image == null)
-            {
-                SakrijKomponenete();
-            }
+
         }
 
         private void btnSpremi_Click(object sender, EventArgs e)
@@ -71,7 +78,7 @@ namespace Aplikacija_za_uredivanje_slike
         {
             //value/5
             //vrijednost 0 - 10 a za svjetlinu ce trebati 0 - 2
-            imageBox1.Image = ModulProcessImage.Svjetlina(modulProcessImage.PovijestStanja.Last(), (double) tbSvjetlina.Value/5);
+            imageBox1.Image = ModulProcessImage.Svjetlina(modulProcessImage.PovijestStanja.GetFirst(), (double) tbSvjetlina.Value/5);
             DodajSlikuUListu(imageBox1.Image.Bitmap);
         }
         private void btnPromijeniVelicinu_Click(object sender, EventArgs e)

@@ -77,7 +77,7 @@
             // 
             // imageBox1
             // 
-            this.imageBox1.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.imageBox1.BackColor = System.Drawing.SystemColors.Control;
             this.imageBox1.Location = new System.Drawing.Point(185, 21);
             this.imageBox1.Name = "imageBox1";
             this.imageBox1.Size = new System.Drawing.Size(600, 600);
