@@ -13,6 +13,7 @@ namespace Aplikacija_za_uredivanje_slike
     class ModulProcessImage
     {
         public Bitmap Slika { get; set; }
+        public Bitmap PrvaSlika { get; set; }
         public PovijestStanja<Bitmap> PovijestStanja { get; set; }
         public ModulProcessImage()
         {
@@ -36,20 +37,24 @@ namespace Aplikacija_za_uredivanje_slike
             switch (orijentacija)
             {
                 case "lijevo":
-                    imageBgr = imageBgr.Rotate(90, new Bgr(0, 0, 0));
+                    imageBgr = imageBgr.Rotate(-90, new Bgr(0, 0, 0), false);
                     return imageBgr;
                 case "desno":
-                    imageBgr = imageBgr.Rotate(-90, new Bgr(0, 0, 0));
+                    imageBgr = imageBgr.Rotate(90, new Bgr(0, 0, 0), false);
                     return imageBgr;
                 default:
                     return imageBgr;
             }  
         }
-        public static Image<Bgr,byte> Svjetlina(Bitmap slika, double intezitet)
+        public static Image<Bgr, byte> Svjetlina(Image<Bgr, byte> image, double intezitet)
         {
-            Image<Bgr, byte> imageBgr = new Image<Bgr, byte>(slika);
-            imageBgr = imageBgr.Mul(intezitet); 
-            return imageBgr;
+            return image.Mul(intezitet);
+        }
+        public static Image<Bgr,byte> Kontrast(Image<Bgr, byte> image, double intezitet)
+        {
+            image._EqualizeHist();
+            image._GammaCorrect(intezitet);
+            return image;
         }
     }
 }

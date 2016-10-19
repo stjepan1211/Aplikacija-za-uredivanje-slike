@@ -42,21 +42,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tbSvjetlina = new System.Windows.Forms.TrackBar();
             this.tbKontrast = new System.Windows.Forms.TrackBar();
-            this.lblVelicinaSlike = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.tbPovecajVisinu = new System.Windows.Forms.TextBox();
-            this.tbSmanjiVisinu = new System.Windows.Forms.TextBox();
-            this.tbPovecajSirinu = new System.Windows.Forms.TextBox();
-            this.tbSmanjiSirinu = new System.Windows.Forms.TextBox();
+            this.tbPromjeniVisinu = new System.Windows.Forms.TextBox();
+            this.tbPromjeniSirinu = new System.Windows.Forms.TextBox();
             this.btnPromijeniVelicinu = new System.Windows.Forms.Button();
             this.btnVrati = new System.Windows.Forms.Button();
-            this.btnIzrezi = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnZoom = new System.Windows.Forms.Button();
+            this.btnZoomOut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbSvjetlina)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbKontrast)).BeginInit();
@@ -78,6 +73,7 @@
             // imageBox1
             // 
             this.imageBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.imageBox1.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
             this.imageBox1.Location = new System.Drawing.Point(185, 21);
             this.imageBox1.Name = "imageBox1";
             this.imageBox1.Size = new System.Drawing.Size(600, 600);
@@ -89,7 +85,7 @@
             // 
             this.btnSpremi.BackColor = System.Drawing.SystemColors.Control;
             this.btnSpremi.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSpremi.Location = new System.Drawing.Point(12, 480);
+            this.btnSpremi.Location = new System.Drawing.Point(12, 501);
             this.btnSpremi.Name = "btnSpremi";
             this.btnSpremi.Size = new System.Drawing.Size(120, 40);
             this.btnSpremi.TabIndex = 5;
@@ -103,7 +99,7 @@
             this.btnGrayScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGrayScale.Location = new System.Drawing.Point(14, 83);
             this.btnGrayScale.Name = "btnGrayScale";
-            this.btnGrayScale.Size = new System.Drawing.Size(120, 25);
+            this.btnGrayScale.Size = new System.Drawing.Size(82, 25);
             this.btnGrayScale.TabIndex = 6;
             this.btnGrayScale.Text = "GrayScale";
             this.btnGrayScale.UseVisualStyleBackColor = false;
@@ -113,9 +109,9 @@
             // 
             this.btnNegativ.BackColor = System.Drawing.SystemColors.Control;
             this.btnNegativ.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNegativ.Location = new System.Drawing.Point(12, 114);
+            this.btnNegativ.Location = new System.Drawing.Point(95, 83);
             this.btnNegativ.Name = "btnNegativ";
-            this.btnNegativ.Size = new System.Drawing.Size(120, 25);
+            this.btnNegativ.Size = new System.Drawing.Size(84, 25);
             this.btnNegativ.TabIndex = 7;
             this.btnNegativ.Text = "Negativ";
             this.btnNegativ.UseVisualStyleBackColor = false;
@@ -159,7 +155,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(10, 4);
+            this.label2.Location = new System.Drawing.Point(9, 204);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 17);
             this.label2.TabIndex = 12;
@@ -169,7 +165,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(9, 72);
+            this.label3.Location = new System.Drawing.Point(9, 252);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 17);
             this.label3.TabIndex = 13;
@@ -179,38 +175,34 @@
             // 
             this.tbSvjetlina.BackColor = System.Drawing.SystemColors.Control;
             this.tbSvjetlina.Cursor = System.Windows.Forms.Cursors.VSplit;
-            this.tbSvjetlina.Location = new System.Drawing.Point(9, 24);
+            this.tbSvjetlina.LargeChange = 2;
+            this.tbSvjetlina.Location = new System.Drawing.Point(3, 224);
             this.tbSvjetlina.Name = "tbSvjetlina";
-            this.tbSvjetlina.Size = new System.Drawing.Size(145, 45);
+            this.tbSvjetlina.Size = new System.Drawing.Size(154, 45);
             this.tbSvjetlina.TabIndex = 14;
             this.tbSvjetlina.Value = 5;
             this.tbSvjetlina.ValueChanged += new System.EventHandler(this.tbSvjetlina_ValueChanged);
+            this.tbSvjetlina.Leave += new System.EventHandler(this.tbSvjetlina_Leave);
             // 
             // tbKontrast
             // 
             this.tbKontrast.BackColor = System.Drawing.SystemColors.Control;
             this.tbKontrast.Cursor = System.Windows.Forms.Cursors.VSplit;
-            this.tbKontrast.Location = new System.Drawing.Point(9, 92);
+            this.tbKontrast.LargeChange = 2;
+            this.tbKontrast.Location = new System.Drawing.Point(3, 275);
+            this.tbKontrast.Minimum = 3;
             this.tbKontrast.Name = "tbKontrast";
-            this.tbKontrast.Size = new System.Drawing.Size(145, 45);
+            this.tbKontrast.Size = new System.Drawing.Size(154, 45);
             this.tbKontrast.TabIndex = 15;
-            this.tbKontrast.Value = 5;
-            // 
-            // lblVelicinaSlike
-            // 
-            this.lblVelicinaSlike.AutoSize = true;
-            this.lblVelicinaSlike.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVelicinaSlike.Location = new System.Drawing.Point(9, 340);
-            this.lblVelicinaSlike.Name = "lblVelicinaSlike";
-            this.lblVelicinaSlike.Size = new System.Drawing.Size(163, 16);
-            this.lblVelicinaSlike.TabIndex = 16;
-            this.lblVelicinaSlike.Text = "Promijeni veličinu slike(%)";
+            this.tbKontrast.Value = 6;
+            this.tbKontrast.ValueChanged += new System.EventHandler(this.tbKontrast_ValueChanged);
+            this.tbKontrast.Leave += new System.EventHandler(this.tbKontrast_Leave);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(6, 172);
+            this.label4.Location = new System.Drawing.Point(17, 61);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 16);
             this.label4.TabIndex = 17;
@@ -220,81 +212,31 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(8, 194);
+            this.label5.Location = new System.Drawing.Point(20, 33);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 16);
             this.label5.TabIndex = 18;
             this.label5.Text = "Širina:";
             // 
-            // label6
+            // tbPromjeniVisinu
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(53, 174);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(13, 13);
-            this.label6.TabIndex = 19;
-            this.label6.Text = "+";
+            this.tbPromjeniVisinu.Location = new System.Drawing.Point(76, 61);
+            this.tbPromjeniVisinu.Name = "tbPromjeniVisinu";
+            this.tbPromjeniVisinu.Size = new System.Drawing.Size(69, 20);
+            this.tbPromjeniVisinu.TabIndex = 23;
             // 
-            // label7
+            // tbPromjeniSirinu
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(105, 171);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(10, 13);
-            this.label7.TabIndex = 20;
-            this.label7.Text = "-";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(53, 193);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(13, 13);
-            this.label8.TabIndex = 21;
-            this.label8.Text = "+";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(104, 193);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(10, 13);
-            this.label9.TabIndex = 22;
-            this.label9.Text = "-";
-            // 
-            // tbPovecajVisinu
-            // 
-            this.tbPovecajVisinu.Location = new System.Drawing.Point(66, 171);
-            this.tbPovecajVisinu.Name = "tbPovecajVisinu";
-            this.tbPovecajVisinu.Size = new System.Drawing.Size(34, 20);
-            this.tbPovecajVisinu.TabIndex = 23;
-            // 
-            // tbSmanjiVisinu
-            // 
-            this.tbSmanjiVisinu.Location = new System.Drawing.Point(120, 171);
-            this.tbSmanjiVisinu.Name = "tbSmanjiVisinu";
-            this.tbSmanjiVisinu.Size = new System.Drawing.Size(34, 20);
-            this.tbSmanjiVisinu.TabIndex = 24;
-            // 
-            // tbPovecajSirinu
-            // 
-            this.tbPovecajSirinu.Location = new System.Drawing.Point(66, 193);
-            this.tbPovecajSirinu.Name = "tbPovecajSirinu";
-            this.tbPovecajSirinu.Size = new System.Drawing.Size(34, 20);
-            this.tbPovecajSirinu.TabIndex = 25;
-            // 
-            // tbSmanjiSirinu
-            // 
-            this.tbSmanjiSirinu.Location = new System.Drawing.Point(120, 193);
-            this.tbSmanjiSirinu.Name = "tbSmanjiSirinu";
-            this.tbSmanjiSirinu.Size = new System.Drawing.Size(34, 20);
-            this.tbSmanjiSirinu.TabIndex = 26;
+            this.tbPromjeniSirinu.Location = new System.Drawing.Point(76, 32);
+            this.tbPromjeniSirinu.Name = "tbPromjeniSirinu";
+            this.tbPromjeniSirinu.Size = new System.Drawing.Size(69, 20);
+            this.tbPromjeniSirinu.TabIndex = 25;
             // 
             // btnPromijeniVelicinu
             // 
             this.btnPromijeniVelicinu.BackColor = System.Drawing.SystemColors.Control;
             this.btnPromijeniVelicinu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPromijeniVelicinu.Location = new System.Drawing.Point(66, 219);
+            this.btnPromijeniVelicinu.Location = new System.Drawing.Point(74, 87);
             this.btnPromijeniVelicinu.Name = "btnPromijeniVelicinu";
             this.btnPromijeniVelicinu.Size = new System.Drawing.Size(88, 33);
             this.btnPromijeniVelicinu.TabIndex = 27;
@@ -314,38 +256,49 @@
             this.btnVrati.UseVisualStyleBackColor = false;
             this.btnVrati.Click += new System.EventHandler(this.btnVrati_Click);
             // 
-            // btnIzrezi
-            // 
-            this.btnIzrezi.BackColor = System.Drawing.SystemColors.Control;
-            this.btnIzrezi.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIzrezi.Image = ((System.Drawing.Image)(resources.GetObject("btnIzrezi.Image")));
-            this.btnIzrezi.Location = new System.Drawing.Point(82, 54);
-            this.btnIzrezi.Name = "btnIzrezi";
-            this.btnIzrezi.Size = new System.Drawing.Size(64, 23);
-            this.btnIzrezi.TabIndex = 29;
-            this.btnIzrezi.UseVisualStyleBackColor = false;
-            // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.btnPromijeniVelicinu);
-            this.panel1.Controls.Add(this.tbSmanjiSirinu);
-            this.panel1.Controls.Add(this.tbPovecajSirinu);
-            this.panel1.Controls.Add(this.tbSmanjiVisinu);
-            this.panel1.Controls.Add(this.tbPovecajVisinu);
-            this.panel1.Controls.Add(this.label9);
-            this.panel1.Controls.Add(this.label8);
-            this.panel1.Controls.Add(this.label7);
-            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.tbPromjeniSirinu);
+            this.panel1.Controls.Add(this.tbPromjeniVisinu);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.tbKontrast);
-            this.panel1.Controls.Add(this.tbSvjetlina);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(3, 200);
+            this.panel1.Location = new System.Drawing.Point(3, 326);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(168, 265);
+            this.panel1.Size = new System.Drawing.Size(168, 144);
             this.panel1.TabIndex = 30;
+            this.panel1.Leave += new System.EventHandler(this.panel1_Leave);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(9, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(153, 17);
+            this.label10.TabIndex = 30;
+            this.label10.Text = "Promijeni veličinu slike:";
+            // 
+            // btnZoom
+            // 
+            this.btnZoom.Location = new System.Drawing.Point(12, 116);
+            this.btnZoom.Name = "btnZoom";
+            this.btnZoom.Size = new System.Drawing.Size(55, 23);
+            this.btnZoom.TabIndex = 32;
+            this.btnZoom.Text = "Zoom In";
+            this.btnZoom.UseVisualStyleBackColor = true;
+            this.btnZoom.Click += new System.EventHandler(this.btnZoom_Click);
+            // 
+            // btnZoomOut
+            // 
+            this.btnZoomOut.Location = new System.Drawing.Point(68, 116);
+            this.btnZoomOut.Name = "btnZoomOut";
+            this.btnZoomOut.Size = new System.Drawing.Size(75, 23);
+            this.btnZoomOut.TabIndex = 33;
+            this.btnZoomOut.Text = "Zoom Out";
+            this.btnZoomOut.UseVisualStyleBackColor = true;
+            this.btnZoomOut.Click += new System.EventHandler(this.btnZoomOut_Click);
             // 
             // Form1
             // 
@@ -354,15 +307,19 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(933, 693);
+            this.Controls.Add(this.btnZoomOut);
+            this.Controls.Add(this.btnZoom);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.btnIzrezi);
             this.Controls.Add(this.btnVrati);
-            this.Controls.Add(this.lblVelicinaSlike);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRotirajDesno);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tbKontrast);
             this.Controls.Add(this.btnRotirajLijevo);
+            this.Controls.Add(this.tbSvjetlina);
             this.Controls.Add(this.btnNegativ);
             this.Controls.Add(this.btnGrayScale);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSpremi);
             this.Controls.Add(this.imageBox1);
             this.Controls.Add(this.btnUcitaj);
@@ -396,21 +353,16 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar tbSvjetlina;
         private System.Windows.Forms.TrackBar tbKontrast;
-        private System.Windows.Forms.Label lblVelicinaSlike;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox tbPovecajVisinu;
-        private System.Windows.Forms.TextBox tbSmanjiVisinu;
-        private System.Windows.Forms.TextBox tbPovecajSirinu;
-        private System.Windows.Forms.TextBox tbSmanjiSirinu;
+        private System.Windows.Forms.TextBox tbPromjeniVisinu;
+        private System.Windows.Forms.TextBox tbPromjeniSirinu;
         private System.Windows.Forms.Button btnPromijeniVelicinu;
         private System.Windows.Forms.Button btnVrati;
-        private System.Windows.Forms.Button btnIzrezi;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnZoom;
+        private System.Windows.Forms.Button btnZoomOut;
     }
 }
 

@@ -12,48 +12,72 @@ using Emgu.CV.UI;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using System.Drawing.Imaging;
+using System.Threading;
 
 namespace Aplikacija_za_uredivanje_slike
 {
     public partial class Form1 : Form
     {
         ModulProcessImage modulProcessImage = new ModulProcessImage();
+       
         public Form1()
         {
             InitializeComponent();
-            //SakrijKomponenete();
+            SakrijKomponenete();
+            
         }
         private void btnUcitaj_Click(object sender, EventArgs e)
         {
             imageBox1.Image = ModulInputOutput.UcitajSliku();
-            PokaziKomponente();
-            //if (imageBox1.Image == null)
-            //{
-            //    SakrijKomponenete();
-            //}
+
             //ako stisne cancel pri odabiru datoteke, Image ce biti null
             try
             {
                 if (imageBox1.Image != null)
+                {
+                    modulProcessImage.PovijestStanja.EmptyList();
                     DodajSlikuUListu(imageBox1.Image.Bitmap);
+                    modulProcessImage.PrvaSlika = imageBox1.Image.Bitmap;
+                    PokaziKomponente();
+                }
+
                 else
                 {
-                    imageBox1.Image = new Image<Bgr, byte>(modulProcessImage.PovijestStanja.GetFirst());
-                    PokaziKomponente();
+                    modulProcessImage.PovijestStanja.EmptyList();
+                    imageBox1.Image = new Image<Bgr, byte>(modulProcessImage.PrvaSlika);
+                    DodajSlikuUListu(imageBox1.Image.Bitmap);
                 }
             }
             catch (NullReferenceException exception)
             {
-
+                MessageBox.Show("Odaberite sliku i format. Zatim stisnite Open/Otvori.");
             }
-
         }
 
         private void btnSpremi_Click(object sender, EventArgs e)
         {
             ModulInputOutput.SpremiSliku(new Bitmap(imageBox1.Image.Bitmap));
+            DialogResult result = MessageBox.Show("Želite li napustiti program?","Izlaz", MessageBoxButtons.YesNo);
+            if(result == DialogResult.Yes)
+            {
+                this.Close();
+            }
         }
+        private void btnZoom_Click(object sender, EventArgs e)
+        {
+            Image<Bgr, byte> slika = new Image<Bgr, byte>(imageBox1.Image.Bitmap);
+            int visina = slika.Size.Height;
+            int sirina = slika.Size.Width;
+            imageBox1.SetZoomScale(2, new Point(sirina, visina));
+        }
+        private void btnZoomOut_Click(object sender, EventArgs e)
+        {
+            Image<Bgr, byte> slika = new Image<Bgr, byte>(imageBox1.Image.Bitmap);
+            int visina = slika.Size.Height;
+            int sirina = slika.Size.Width;
+            imageBox1.SetZoomScale(0.9d, new Point(sirina, visina));
 
+        }
         private void btnGrayScale_Click(object sender, EventArgs e)
         {
             imageBox1.Image = ModulProcessImage.GrayScale(imageBox1.Image.Bitmap);
@@ -76,13 +100,64 @@ namespace Aplikacija_za_uredivanje_slike
         }
         private void tbSvjetlina_ValueChanged(object sender, EventArgs e)
         {
-            //value/5
+            //value kroz 5 i +0,1 da ne bude 0 jer ce biti potpuno mracna
             //vrijednost 0 - 10 a za svjetlinu ce trebati 0 - 2
-            imageBox1.Image = ModulProcessImage.Svjetlina(modulProcessImage.PovijestStanja.GetFirst(), (double) tbSvjetlina.Value/5);
+            try
+            {
+                imageBox1.Image = ModulProcessImage.Svjetlina(new Image<Bgr, byte>(modulProcessImage.Slika), (double)tbSvjetlina.Value / 5 + 0.1);
+            }
+            catch(AccessViolationException exception)
+            {
+                MessageBox.Show("Nije moguce tako brzo mijenjati svjetlinu.");
+            }
+        }
+        private void tbKontrast_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                imageBox1.Image = ModulProcessImage.Kontrast(new Image<Bgr, byte>(modulProcessImage.Slika), (double)tbKontrast.Value / 4);
+            }
+            catch(Exception exception)
+            {
+                MessageBox.Show("Nije moguce tako brzo mijenjati kontrast.");
+            }
+        }
+        private void tbSvjetlina_Leave(object sender, EventArgs e)
+        {
+            DodajSlikuUListu(imageBox1.Image.Bitmap);
+        }
+        private void tbKontrast_Leave(object sender, EventArgs e)
+        {
             DodajSlikuUListu(imageBox1.Image.Bitmap);
         }
         private void btnPromijeniVelicinu_Click(object sender, EventArgs e)
         {
+            int promjeniVisinu;
+            int promjeniSirinu;
+            bool visinaParsirana = Int32.TryParse(tbPromjeniVisinu.Text, out promjeniVisinu);
+            bool sirinaParsirana = Int32.TryParse(tbPromjeniSirinu.Text, out promjeniSirinu);
+            Image<Bgr, byte> image = new Image<Bgr, byte>(imageBox1.Image.Bitmap);
+            Image<Bgr, byte> resizedImage;
+            int visina = image.Size.Height;
+            int sirina = image.Size.Width;
+
+            if (visinaParsirana && sirinaParsirana && promjeniVisinu <= 1000 && promjeniVisinu >= 100 && promjeniSirinu <= 1000
+                && promjeniSirinu >= 100)
+            {
+                resizedImage = image.Resize(promjeniSirinu, promjeniVisinu, Inter.Linear);
+                imageBox1.Image = resizedImage;
+                DodajSlikuUListu(imageBox1.Image.Bitmap);            }
+            else if(sirinaParsirana && tbPromjeniVisinu.Text == "" && promjeniSirinu >= 100 && promjeniSirinu <= 1000)
+            {
+                resizedImage = image.Resize(promjeniSirinu, visina, Inter.Linear);
+                imageBox1.Image = resizedImage;
+                DodajSlikuUListu(imageBox1.Image.Bitmap);
+                
+            }
+            else
+            {
+                MessageBox.Show("Potrebno je unjeti cijeli broj između 100 i 1000 za promjenu veličine.");
+            }
 
         }
         private void btnVrati_Click(object sender, EventArgs e)
@@ -90,12 +165,17 @@ namespace Aplikacija_za_uredivanje_slike
             try
             {
                 imageBox1.Image = new Image<Bgr, byte>(modulProcessImage.PovijestStanja.Pop());
+                modulProcessImage.Slika = imageBox1.Image.Bitmap;
             }
-            catch (NullReferenceException exception)
+            catch (Exception exception)
             {
-                MessageBox.Show("Nemoguce se vratiti korak unazad.(max 5 puta)");
+                MessageBox.Show("Nemoguce se vratiti unazad. (Maksimalno 5 puta ili niste napravili dovoljno koraka.)");
             }
-
+        }
+        private void panel1_Leave(object sender, EventArgs e)
+        {
+            tbPromjeniVisinu.Text = "";
+            tbPromjeniSirinu.Text = "";
         }
         private void SakrijKomponenete()
         {
@@ -106,54 +186,52 @@ namespace Aplikacija_za_uredivanje_slike
             btnRotirajDesno.Visible = false;
             btnRotirajLijevo.Visible = false;
             btnVrati.Visible = false;
-            btnIzrezi.Visible = false;
             label1.Visible = false;
             label2.Visible = false;
             label3.Visible = false;
             label4.Visible = false;
             label5.Visible = false;
-            label6.Visible = false;
-            label7.Visible = false;
-            label8.Visible = false;
-            label9.Visible = false;
             tbKontrast.Visible = false;
-            lblVelicinaSlike.Visible = false;
-            tbPovecajSirinu.Visible = false;
-            tbPovecajVisinu.Visible = false;
-            tbSmanjiSirinu.Visible = false;
-            tbSmanjiVisinu.Visible = false;
+            tbPromjeniSirinu.Visible = false;
+            tbPromjeniVisinu.Visible = false;
             tbSvjetlina.Visible = false;
+            label10.Visible = false;
+            tbPromjeniSirinu.Visible = false;
+            tbPromjeniVisinu.Visible = false;
+            btnPromijeniVelicinu.Visible = false;
+            label4.Visible = false;
+            label5.Visible = false;
+            btnPromijeniVelicinu.Visible = false;
+            btnZoom.Visible = false;
+            btnZoomOut.Visible = false;
         }
         private void PokaziKomponente()
         {
             btnSpremi.Visible = true;
             btnNegativ.Visible = true;
             btnGrayScale.Visible = true;
-            btnPromijeniVelicinu.Visible = true;
             btnRotirajDesno.Visible = true;
             btnRotirajLijevo.Visible = true;
             btnVrati.Visible = true;
-            btnIzrezi.Visible = true;
             label1.Visible = true;
             label2.Visible = true;
             label3.Visible = true;
+            tbKontrast.Visible = true;
+            tbSvjetlina.Visible = true;
+            label10.Visible = true;
+            tbPromjeniSirinu.Visible = true;
+            tbPromjeniVisinu.Visible = true;
+            btnPromijeniVelicinu.Visible = true;
             label4.Visible = true;
             label5.Visible = true;
-            label6.Visible = true;
-            label7.Visible = true;
-            label8.Visible = true;
-            label9.Visible = true;
-            tbKontrast.Visible = true;
-            lblVelicinaSlike.Visible = true;
-            tbPovecajSirinu.Visible = true;
-            tbPovecajVisinu.Visible = true;
-            tbSmanjiSirinu.Visible = true;
-            tbSmanjiVisinu.Visible = true;
-            tbSvjetlina.Visible = true;
+            btnPromijeniVelicinu.Visible = true;
+            btnZoom.Visible = true;
+            btnZoomOut.Visible = true;
         }
         private void DodajSlikuUListu(Bitmap slika)
         {
             modulProcessImage.PovijestStanja.Push(imageBox1.Image.Bitmap);
+            modulProcessImage.Slika = imageBox1.Image.Bitmap;
         }
     }
 }

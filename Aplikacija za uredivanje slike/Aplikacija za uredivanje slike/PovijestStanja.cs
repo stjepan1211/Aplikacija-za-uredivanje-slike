@@ -30,5 +30,9 @@ namespace Aplikacija_za_uredivanje_slike
             var item = this.First.Value;
             return item;
         }
+        public void EmptyList()
+        {
+            this.Clear();
+        }
     }
 }
